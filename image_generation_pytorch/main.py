@@ -6,7 +6,7 @@ from torch.backends import cudnn
 from datetime import datetime
 import json
 
-def save_config(config, shared_path):
+def save_config(config: argparse.Namespace, shared_path: str):
     save_path = os.path.join(shared_path, "params.json")
 
     with open(save_path, 'w') as fp:
@@ -26,38 +26,30 @@ def get_time():
     return datetime.now().strftime("%d%m_%H%M%S")
 
 
-def main(config):
+def main(config: argparse.Namespace):
     cudnn.benchmark = True
 
     config.time_now = get_time()
 
     if config.mode == 'train':
-        data_loader = get_loader(data_path=config.data_path,
-                                 batch_size=config.batch_size,
-                                 mode=config.mode,
-                                 num_workers=config.num_workers)
+        data_loader = get_loader(
+            data_path=config.data_path,
+            batch_size=config.batch_size,
+            mode=config.mode,
+            num_workers=config.num_workers
+        )
 
-
-        shared_path = '{}{}'.format(config.base_path, config.time_now)
+        shared_path = f"{config.base_path}{config.time_now}"
 
         config.base_path = shared_path
-        config.model_path = "{}/{}".format(shared_path, config.model_path)
-        config.sample_path = "{}/{}".format(shared_path, config.sample_path)
-        config.logs_path = "{}/{}".format(shared_path, config.logs_path)
-        config.validation_path = "{}/{}".format(shared_path, config.validation_path)
-        
-        if not os.path.exists(config.model_path):
-            os.makedirs(config.model_path)
+        config.model_path = f"{shared_path}/{config.model_path}"
+        config.sample_path = f"{shared_path}/{config.sample_path}"
+        config.logs_path = f"{shared_path}/{config.logs_path}"
+        config.validation_path = f"{shared_path}/{config.validation_path}"
 
-        if not os.path.exists(config.sample_path):
-            os.makedirs(config.sample_path)
-
-        if not os.path.exists(config.logs_path):
-            os.makedirs(config.logs_path)
-
-        if not os.path.exists(config.validation_path):
-            os.makedirs(config.validation_path)
-
+        for path in [config.model_path, config.sample_path, config.logs_path, config.validation_path]:
+            if not os.path.exists(path):
+                os.makedirs(path)
         save_config(config, shared_path)
 
     else:

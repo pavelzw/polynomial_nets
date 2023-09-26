@@ -1,0 +1,19 @@
+[project]
+name = "image_generation_pytorch"
+version = "0.1.0"
+description = "Add a short description here"
+authors = ["Pavel Zwerschke <pavelzw@gmail.com>"]
+channels = ["conda-forge", "pytorch"]
+platforms = ["linux-64", "osx-arm64"]
+
+[tasks]
+
+[dependencies]
+python = "3.10.*"
+pytorch = "1.*"
+torchvision = "0.*"
+scipy = "1.*"
+tensorflow = "2.*"
+imageio = "2.31.1.*"
+tqdm = "4.66.1.*"
+loguru = "0.7.2.*"

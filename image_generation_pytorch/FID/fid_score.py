@@ -39,7 +39,7 @@ import numpy as np
 import torch
 import pickle
 from scipy import linalg
-from scipy.misc import imread
+from imageio import imread
 from torch.nn.functional import adaptive_avg_pool2d
 
 try:

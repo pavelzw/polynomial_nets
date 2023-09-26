@@ -16,7 +16,7 @@ torch.backends.cudnn.benchmark = False
 import json
 from FID.fid_score import calculate_fid_given_paths as FID
 
-def save_is(base_path, score):
+def save_is(base_path: str, score):
     save_file = os.path.join(base_path, "scores.json")
 
     with open(save_file, 'a+') as fp:
@@ -25,19 +25,19 @@ def save_is(base_path, score):
         fp.close()
 
 
-def denorm(x):
+def denorm(x: torch.Tensor) -> torch.Tensor:
     x = 0.5 * (x + 1)
     x = x.clamp(0, 1)
     return x
 
 
-def to_cuda(x):
+def to_cuda(x: torch.Tensor) -> torch.Tensor:
     if torch.cuda.is_available():
         x = x.cuda()
     return x
 
 
-def to_numpy(x):
+def to_numpy(x: torch.Tensor) -> np.ndarray:
     if torch.cuda.is_available():
         x = x.data.cpu()
     return x.numpy()
