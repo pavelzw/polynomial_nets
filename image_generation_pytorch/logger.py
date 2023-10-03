@@ -1,7 +1,7 @@
 # Code referenced from https://gist.github.com/gyglim/1f8dfb1b5c82627ae3efcfbbadb9f514
 import tensorflow as tf
 import numpy as np
-import scipy.misc 
+import scipy.misc
 from io import BytesIO
 
 
@@ -20,7 +20,7 @@ class Logger(object):
         """Log a list of images."""
         with self.writer.as_default():
             tf.summary.image(f"{tag}", images, step=step)
-        
+
     def histo_summary(self, tag, values, step, bins=1000):
         """Log a histogram of the tensor of values."""
 

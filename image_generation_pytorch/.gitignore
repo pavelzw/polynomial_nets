@@ -1,4 +1,5 @@
 # pixi environments
 .pixi
 
-./dcgan_inject
+dcgan_inject/
+data/
