@@ -3,6 +3,7 @@ import torch.nn as nn
 import os
 from torch import optim
 from torch.autograd import Variable
+from config import Config
 from model import Discriminator
 from model import Generator
 from logger import Logger
@@ -11,6 +12,7 @@ from torchvision.utils import save_image
 from torch.autograd import grad as torch_grad
 from collections import OrderedDict
 from IS.inception_score import inception_score as IS
+from torch.utils.data.dataloader import DataLoader
 
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
@@ -46,7 +48,7 @@ def to_numpy(x: torch.Tensor) -> np.ndarray:
 
 
 class Solver(object):
-    def __init__(self, config, data_loader):
+    def __init__(self, config: Config, data_loader: DataLoader | None):
         self.generator = None
         self.discriminator = None
         self.g_optimizer = None

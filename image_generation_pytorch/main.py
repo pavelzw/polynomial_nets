@@ -1,19 +1,21 @@
 import argparse
 import os
+from typing import Literal
+from config import Config
 from solver import Solver
 from data_loader import get_loader
 from torch.backends import cudnn
 from datetime import datetime
 import json
 
-def save_config(config: argparse.Namespace, shared_path: str):
+def save_config(config: Config, shared_path: str):
     save_path = os.path.join(shared_path, "params.json")
 
     with open(save_path, 'w') as fp:
         json.dump(config.__dict__, fp, indent=4, sort_keys=True)
 
 
-def str2bool(v):
+def str2bool(v: str) -> bool:
     if v.lower() in ('yes', 'true', 't', 'y', '1'):
         return True
     elif v.lower() in ('no', 'false', 'f', 'n', '0'):
@@ -22,11 +24,11 @@ def str2bool(v):
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
 
-def get_time():
+def get_time() -> str:
     return datetime.now().strftime("%d%m_%H%M%S")
 
 
-def main(config: argparse.Namespace):
+def main(config: Config):
     cudnn.benchmark = True
 
     config.time_now = get_time()
