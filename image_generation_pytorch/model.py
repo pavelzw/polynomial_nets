@@ -1,3 +1,4 @@
+from typing import Literal
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn.utils import spectral_norm as SN
@@ -9,13 +10,13 @@ from torch.nn.functional import linear
 class Generator(nn.Module):
     def __init__(
         self,
-        g_layers=[],
-        activation_fn=True,
-        inject_z=True,
-        transform_rep=6,
-        transform_z=False,
-        concat_injection=False,
-        norm="instance",
+        g_layers: list[int] = [],
+        activation_fn: bool = True,
+        inject_z: bool = True,
+        transform_rep: int = 6,
+        transform_z: bool = False,
+        concat_injection: bool = False,
+        norm: Literal["instance", "batch"] = "instance",
     ):
         super(Generator, self).__init__()
         self.activation_fn = activation_fn
@@ -112,7 +113,7 @@ class Generator(nn.Module):
                 if not self.activation_fn:
                     setattr(
                         self,
-                        "layer{}".format(i),
+                        f"layer{i}",
                         nn.Sequential(
                             nn.ConvTranspose2d(
                                 self.g_layers[i],
@@ -318,7 +319,12 @@ class Generator(nn.Module):
 
 
 class Discriminator(nn.Module):
-    def __init__(self, d_layers=[], activation_fn=True, spectral_norm=False):
+    def __init__(
+        self,
+        d_layers: list[int] = [],
+        activation_fn: bool = True,
+        spectral_norm: bool = False,
+    ):
         super(Discriminator, self).__init__()
         self.activation_fn = activation_fn
         self.d_layers = d_layers
@@ -487,5 +493,5 @@ class Discriminator(nn.Module):
 
     def forward(self, x):
         for i in range(self.num_layers):
-            x = getattr(self, "layer{}".format(i))(x)
+            x = getattr(self, f"layer{i}")(x)
         return x

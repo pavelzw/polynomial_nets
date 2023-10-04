@@ -137,7 +137,7 @@ class Solver(object):
         self.generator.zero_grad()
 
     # custom weights initialization called on netG and netD
-    def weights_init(self, m):
+    def weights_init(self, m: nn.Module):
         classname = m.__class__.__name__
         if classname.find("Conv") != -1:
             m.weight.data.normal_(0.0, 0.02)
