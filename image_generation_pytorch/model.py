@@ -34,7 +34,7 @@ class Generator(nn.Module):
                     self,
                     f"global{i}",
                     nn.Sequential(
-                        nn.Linear(self.g_layers[0], self.g_layers[0]), nn.ReLU()
+                        nn.Linear(self.g_layers[0], self.g_layers[0]), nn.ReLU(inplace=False)
                     ),
                 )
 
@@ -88,7 +88,7 @@ class Generator(nn.Module):
                                     bias=False,
                                 ),
                                 nn.InstanceNorm2d(self.g_layers[i + 1]),
-                                nn.ReLU(),
+                                nn.ReLU(inplace=False),
                             ),
                         )
                     else:
@@ -105,7 +105,7 @@ class Generator(nn.Module):
                                     bias=False,
                                 ),
                                 nn.BatchNorm2d(self.g_layers[i + 1]),
-                                nn.ReLU(),
+                                nn.ReLU(inplace=False),
                             ),
                         )
 
@@ -155,7 +155,7 @@ class Generator(nn.Module):
                             self,
                             "inject{}".format(i),
                             nn.Sequential(
-                                nn.Linear(self.g_layers[0], self.g_layers[i]), nn.ReLU()
+                                nn.Linear(self.g_layers[0], self.g_layers[i]), nn.ReLU(inplace=False)
                             ),
                         )
                 if not self.activation_fn:
@@ -239,7 +239,7 @@ class Generator(nn.Module):
                                     bias=False,
                                 ),
                                 nn.InstanceNorm2d(self.g_layers[i + 1]),
-                                nn.ReLU(),
+                                nn.ReLU(inplace=False),
                             ),
                         )
                     else:
@@ -256,7 +256,7 @@ class Generator(nn.Module):
                                     bias=False,
                                 ),
                                 nn.BatchNorm2d(self.g_layers[i + 1]),
-                                nn.ReLU(),
+                                nn.ReLU(inplace=False),
                             ),
                         )
                     if self.concat_injection:
@@ -274,7 +274,7 @@ class Generator(nn.Module):
                                         bias=False,
                                     ),
                                     nn.InstanceNorm2d(self.g_layers[i + 1]),
-                                    nn.ReLU(),
+                                    nn.ReLU(inplace=False),
                                 ),
                             )
                         else:
@@ -291,7 +291,7 @@ class Generator(nn.Module):
                                         bias=False,
                                     ),
                                     nn.BatchNorm2d(self.g_layers[i + 1]),
-                                    nn.ReLU(),
+                                    nn.ReLU(inplace=False),
                                 ),
                             )
 
@@ -358,7 +358,7 @@ class Discriminator(nn.Module):
                                     1,
                                     bias=False,
                                 ),
-                                nn.LeakyReLU(0.2, inplace=True),
+                                nn.LeakyReLU(0.2, inplace=False),
                             ),
                         )
                 else:
@@ -392,7 +392,7 @@ class Discriminator(nn.Module):
                                         bias=False,
                                     )
                                 ),
-                                nn.LeakyReLU(0.2, inplace=True),
+                                nn.LeakyReLU(0.2, inplace=False),
                             ),
                         )
             elif i == self.num_layers - 1:
@@ -451,7 +451,7 @@ class Discriminator(nn.Module):
                                     bias=False,
                                 ),
                                 nn.BatchNorm2d(self.d_layers[i + 1]),
-                                nn.LeakyReLU(0.2, inplace=True),
+                                nn.LeakyReLU(0.2, inplace=False),
                             ),
                         )
                 else:
@@ -487,7 +487,7 @@ class Discriminator(nn.Module):
                                     bias=False,
                                 ),
                                 nn.BatchNorm2d(self.d_layers[i + 1]),
-                                nn.LeakyReLU(0.2, inplace=True),
+                                nn.LeakyReLU(0.2, inplace=False),
                             ),
                         )
 

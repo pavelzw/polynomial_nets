@@ -1,3 +1,4 @@
+from typing import Literal
 import torch
 import torch.nn as nn
 import os
@@ -79,7 +80,7 @@ class Solver(object):
         self.criterion = nn.BCEWithLogitsLoss()
         self.ckpt_gen_path = config.ckpt_gen_path
         self.gp_weight = config.gp_weight
-        self.loss = config.loss
+        self.loss: Literal['original', 'wgan-gp'] = config.loss
         self.seed = config.seed
         self.validation_path = config.validation_path
         self.FID_images = config.FID_images
@@ -182,12 +183,15 @@ class Solver(object):
         return self.gp_weight * ((gradients_norm - 1) ** 2).mean()
 
     def train(self):
+        print(self.discriminator)
+        print(self.generator)
         total_step = len(self.data_loader)
         for epoch in range(self.num_epochs):
             for i, (data, _) in enumerate(self.data_loader):
-                batch_size = data.size(0)
+                data: torch.Tensor
+                batch_size: int = data.size(0)
                 # train Discriminator
-                data = data.type(torch.FloatTensor)
+                data: torch.Tensor = data.type(torch.FloatTensor)
                 data = to_cuda(data)
 
                 real_labels = to_cuda(torch.ones(batch_size, self.d_layers[-1]))

@@ -3876,49 +3876,47 @@ package:
   size: 2225422
   timestamp: 1695158154709
 - name: opt-einsum
-  version: 3.0.0
+  version: 3.3.0
   manager: conda
   platform: linux-64
   dependencies:
-    numpy: '>=1.7'
-    python: '*'
-  url: https://conda.anaconda.org/conda-forge/noarch/opt-einsum-3.0.0-py_0.tar.bz2
+    opt_einsum: '>=3.3.0,<3.3.1.0a0'
+  url: https://conda.anaconda.org/conda-forge/noarch/opt-einsum-3.3.0-hd8ed1ab_2.conda
   hash:
-    md5: 623f36fcd060d4664a3753547de01cb2
-    sha256: d65aeee883e4f8bfdc0a228470a0daf96d3e36f69afd1061dec2dad87e21d2ad
+    md5: ab262acd95cb73f3ed9426cc4204ac3a
+    sha256: 7cc87658f3ef09bd6f85afdf6c55db0c274960132de4050328759e8b3784df22
   optional: false
   category: main
-  build: py_0
+  build: hd8ed1ab_2
   arch: x86_64
   subdir: linux-64
-  build_number: 0
+  build_number: 2
   license: MIT
   license_family: MIT
-  noarch: python
-  size: 47913
-  timestamp: 1565866863077
+  noarch: generic
+  size: 6594
+  timestamp: 1696449067022
 - name: opt-einsum
-  version: 3.0.0
+  version: 3.3.0
   manager: conda
   platform: osx-arm64
   dependencies:
-    numpy: '>=1.7'
-    python: '*'
-  url: https://conda.anaconda.org/conda-forge/noarch/opt-einsum-3.0.0-py_0.tar.bz2
+    opt_einsum: '>=3.3.0,<3.3.1.0a0'
+  url: https://conda.anaconda.org/conda-forge/noarch/opt-einsum-3.3.0-hd8ed1ab_2.conda
   hash:
-    md5: 623f36fcd060d4664a3753547de01cb2
-    sha256: d65aeee883e4f8bfdc0a228470a0daf96d3e36f69afd1061dec2dad87e21d2ad
+    md5: ab262acd95cb73f3ed9426cc4204ac3a
+    sha256: 7cc87658f3ef09bd6f85afdf6c55db0c274960132de4050328759e8b3784df22
   optional: false
   category: main
-  build: py_0
+  build: hd8ed1ab_2
   arch: aarch64
   subdir: osx-arm64
-  build_number: 0
+  build_number: 2
   license: MIT
   license_family: MIT
-  noarch: python
-  size: 47913
-  timestamp: 1565866863077
+  noarch: generic
+  size: 6594
+  timestamp: 1696449067022
 - name: opt_einsum
   version: 3.3.0
   manager: conda

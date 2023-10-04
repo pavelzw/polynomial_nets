@@ -89,7 +89,7 @@ if __name__ == '__main__':
     # network structure of the Discriminator. First layer (3) is the input size (RGB image in our case)
     # and the last layer (1) corresponds to the output
     parser.add_argument('--d_layers', type=int, nargs='+', default=[3, 64, 128, 256, 512, 1])
-    parser.add_argument('--activation_fn', type=str2bool, default=True)
+    parser.add_argument('--activation_fn', type=str2bool, default=False)
     parser.add_argument('--inject_z', type=str2bool, default=True)
     # whether the injection will be concatenated or multiplied
     parser.add_argument('--concat_injection', type=str2bool, default=False)
