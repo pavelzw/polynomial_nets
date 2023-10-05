@@ -14,15 +14,15 @@ class Config:
     activation_fn: bool
     inject_z: bool
     concat_injection: bool
-    loss: Literal['original', 'wgan-gp']
+    loss: Literal["original", "wgan-gp"]
     gp_weight: float
     seed: int
     pc_name: str
     spectral_norm: bool
     transform_z: bool
     transform_rep: int
-    norm: Literal['batch', 'instance']
-    mode: Literal['train', 'test', 'sample']
+    norm: Literal["batch", "instance"]
+    mode: Literal["train", "test", "sample"]
     model_path: str
     sample_path: str
     logs_path: str

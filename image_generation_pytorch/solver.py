@@ -45,7 +45,7 @@ def to_cuda(x: torch.Tensor) -> torch.Tensor:
 def to_numpy(x: torch.Tensor) -> np.ndarray:
     if torch.cuda.is_available():
         x = x.data.cpu()
-    return x.numpy()
+    return x.detach().numpy()
 
 
 class Solver(object):
@@ -80,7 +80,7 @@ class Solver(object):
         self.criterion = nn.BCEWithLogitsLoss()
         self.ckpt_gen_path = config.ckpt_gen_path
         self.gp_weight = config.gp_weight
-        self.loss: Literal['original', 'wgan-gp'] = config.loss
+        self.loss: Literal["original", "wgan-gp"] = config.loss
         self.seed = config.seed
         self.validation_path = config.validation_path
         self.FID_images = config.FID_images
@@ -239,15 +239,10 @@ class Solver(object):
 
                 if (i + 1) % self.log_step == 0:
                     print(
-                        "Epoch [{0:d}/{1:d}], Step [{2:d}/{3:d}], d_real_loss: {4:.4f}, "
-                        " g_loss: {5:.4f}".format(
-                            epoch + 1,
-                            self.num_epochs,
-                            i + 1,
-                            total_step,
-                            d_loss.item(),
-                            g_loss.item(),
-                        )
+                        f"Epoch [{epoch + 1:d}/{self.num_epochs:d}], "
+                        f"Step [{i + 1:d}/{total_step:d}], "
+                        f"d_real_loss: {d_loss.item():.4f}, "
+                        f" g_loss: {g_loss.item():.4f}"
                     )
 
                     # log scalars in tensorboard
@@ -283,23 +278,18 @@ class Solver(object):
                             fake_data
                         )
                     npy_path = os.path.join(
-                        self.model_path, "{}_{}_val_data.pkl".format(epoch + 1, i + 1)
+                        self.model_path, f"{epoch + 1}_{i + 1}_val_data.pkl"
                     )
                     np.save(npy_path, fake_data_all)
-                    score, _ = IS(fake_data_all, cuda=True, batch_size=batch_size)
+                    score, _ = IS(
+                        fake_data_all,
+                        cuda=torch.cuda.is_available(),
+                        batch_size=batch_size,
+                    )
                     if score > self.max_score:
-                        print("Found new best IS score: {}".format(score))
+                        print(f"Found new best IS score: {score}")
                         self.max_score = score
-                        data = (
-                            "IS "
-                            + str(self.seed)
-                            + " "
-                            + str(epoch + 1)
-                            + " "
-                            + str(i + 1)
-                            + " "
-                            + str(self.max_score)
-                        )
+                        data = f"IS {self.seed} {epoch + 1} {i + 1} {self.max_score}"
                         save_is(self.base_path, data)
                         g_path = os.path.join(self.model_path, "generator-best.pkl")
                         d_path = os.path.join(self.model_path, "discriminator-best.pkl")
@@ -313,7 +303,10 @@ class Solver(object):
                             self.validation_path + "/" + str(j) + ".png",
                         )
                     fid_value = FID(
-                        [self.validation_path, self.cifar10_path], 64, True, 2048
+                        [self.validation_path, self.cifar10_path],
+                        batch_size=64,
+                        cuda=torch.cuda.is_available(),
+                        dims=2048,
                     )
                     if fid_value < self.fid_score:
                         self.fid_score = fid_value

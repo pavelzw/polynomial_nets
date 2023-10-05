@@ -34,7 +34,8 @@ class Generator(nn.Module):
                     self,
                     f"global{i}",
                     nn.Sequential(
-                        nn.Linear(self.g_layers[0], self.g_layers[0]), nn.ReLU(inplace=False)
+                        nn.Linear(self.g_layers[0], self.g_layers[0]),
+                        nn.ReLU(inplace=False),
                     ),
                 )
 
@@ -155,7 +156,8 @@ class Generator(nn.Module):
                             self,
                             "inject{}".format(i),
                             nn.Sequential(
-                                nn.Linear(self.g_layers[0], self.g_layers[i]), nn.ReLU(inplace=False)
+                                nn.Linear(self.g_layers[0], self.g_layers[i]),
+                                nn.ReLU(inplace=False),
                             ),
                         )
                 if not self.activation_fn:
