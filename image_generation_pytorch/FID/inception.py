@@ -1,6 +1,6 @@
 import torch.nn as nn
 import torch.nn.functional as F
-from torchvision import models
+from torchvision.models.inception import inception_v3, Inception_V3_Weights
 
 
 class InceptionV3(nn.Module):
@@ -58,7 +58,7 @@ class InceptionV3(nn.Module):
 
         self.blocks = nn.ModuleList()
 
-        inception = models.inception_v3(pretrained=True)
+        inception = inception_v3(weights=Inception_V3_Weights.IMAGENET1K_V1)
 
         # Block 0: input to maxpool1
         block0 = [

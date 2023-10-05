@@ -4,7 +4,7 @@ from torch.autograd import Variable
 from torch.nn import functional as F
 import torch.utils.data
 
-from torchvision.models.inception import inception_v3
+from torchvision.models.inception import inception_v3, Inception_V3_Weights
 
 import numpy as np
 from scipy.stats import entropy
@@ -37,7 +37,7 @@ def inception_score(imgs, cuda=True, batch_size=1, resize=True, splits=1):
     # dataloader = torch.utils.data.DataLoader(imgs, batch_size=batch_size)
 
     # Load inception model
-    inception_model = inception_v3(pretrained=True, transform_input=False).type(dtype)
+    inception_model = inception_v3(weights=Inception_V3_Weights.IMAGENET1K_V1, transform_input=False).type(dtype)
     inception_model.eval()
 
     # up = nn.functional.interpolate(size=(299, 299), mode='bilinear', align_corners=True).type(dtype)

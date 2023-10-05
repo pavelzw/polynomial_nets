@@ -41,14 +41,7 @@ import pickle
 from scipy import linalg
 from imageio import imread
 from torch.nn.functional import adaptive_avg_pool2d
-
-try:
-    from tqdm import tqdm
-except ImportError:
-    # If not tqdm is not available, provide a mock version of it
-    def tqdm(x):
-        return x
-
+import torch.nn as nn
 
 from .inception import InceptionV3
 
@@ -70,12 +63,9 @@ parser.add_argument(
         "By default, uses pool3 features"
     ),
 )
-parser.add_argument(
-    "-c", "--gpu", default="", type=str, help="GPU to use (leave blank for CPU only)"
-)
 
 
-def get_activations(files, model, batch_size=50, dims=2048, cuda=True, verbose=False):
+def get_activations(files: list[str], model: nn.Module, batch_size: int = 50, dims: int = 2048, cuda: bool = True, verbose: bool = False):
     """Calculates the activations of the pool_3 layer for all images.
 
     Params:
@@ -118,9 +108,9 @@ def get_activations(files, model, batch_size=50, dims=2048, cuda=True, verbose=F
 
     pred_arr = np.empty((n_used_imgs, dims))
 
-    for i in tqdm(range(n_batches)):
+    for i in range(n_batches):
         if verbose:
-            print("\rPropagating batch %d/%d" % (i + 1, n_batches), end="", flush=True)
+            print(f"\rPropagating batch {i + 1}/{n_batches}", end="", flush=True)
         start = i * batch_size
         end = start + batch_size
 
@@ -210,7 +200,7 @@ def calculate_frechet_distance(mu1, sigma1, mu2, sigma2, eps=1e-6):
 
 
 def calculate_activation_statistics(
-    files, model, batch_size=50, dims=2048, cuda=False, verbose=False
+    files: list[str], model: nn.Module, batch_size: int = 50, dims: int = 2048, cuda: bool = False, verbose: bool = False
 ):
     """Calculation of the statistics used by the FID.
     Params:
@@ -235,7 +225,7 @@ def calculate_activation_statistics(
     return mu, sigma
 
 
-def _compute_statistics_of_path(path, model, batch_size, dims, cuda):
+def _compute_statistics_of_path(path: str, model: nn.Module, batch_size: int, dims: int, cuda: bool):
     if path.endswith(".pkl"):
         f = pickle.load(open(path, "rb"))
         m, s = f["mu"][:], f["sigma"][:]
@@ -246,11 +236,11 @@ def _compute_statistics_of_path(path, model, batch_size, dims, cuda):
     return m, s
 
 
-def calculate_fid_given_paths(paths, batch_size, cuda, dims):
+def calculate_fid_given_paths(paths: list[str], batch_size: int, cuda: bool, dims: int):
     """Calculates the FID of two paths"""
     for p in paths:
         if not os.path.exists(p):
-            raise RuntimeError("Invalid path: %s" % p)
+            raise RuntimeError(f"Invalid path: {p}")
 
     block_idx = InceptionV3.BLOCK_INDEX_BY_DIM[dims]
 
@@ -269,5 +259,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     # os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
-    fid_value = calculate_fid_given_paths(args.path, args.batch_size, True, args.dims)
+    cuda = torch.cuda.is_available()
+
+    fid_value = calculate_fid_given_paths(paths=args.path, batch_size=args.batch_size, cuda=cuda, dims=args.dims)
     print("FID: ", fid_value)

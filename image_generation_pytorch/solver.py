@@ -310,17 +310,8 @@ class Solver(object):
                     )
                     if fid_value < self.fid_score:
                         self.fid_score = fid_value
-                        print("Found new best FID score: {}".format(self.fid_score))
-                        data = (
-                            "FID "
-                            + str(self.seed)
-                            + " "
-                            + str(epoch + 1)
-                            + " "
-                            + str(i + 1)
-                            + " "
-                            + str(self.fid_score)
-                        )
+                        print(f"Found new best FID score: {self.fid_score}")
+                        data = f"FID {self.seed} {epoch + 1} {i + 1} {self.fid_score}"
                         save_is(self.base_path, data)
                         g_path = os.path.join(self.model_path, "generator-best-fid.pkl")
                         d_path = os.path.join(
@@ -331,10 +322,10 @@ class Solver(object):
 
             if (epoch + 1) % self.save_every == 0:
                 g_path = os.path.join(
-                    self.model_path, "generator-{}.pkl".format(epoch + 1)
+                    self.model_path, f"generator-{epoch + 1}.pkl"
                 )
                 d_path = os.path.join(
-                    self.model_path, "discriminator-{}.pkl".format(epoch + 1)
+                    self.model_path, f"discriminator-{epoch + 1}.pkl"
                 )
                 torch.save(self.generator.state_dict(), g_path)
                 torch.save(self.discriminator.state_dict(), d_path)
